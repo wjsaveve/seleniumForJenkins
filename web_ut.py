@@ -46,7 +46,7 @@ class ISelenium(unittest.TestCase):
 
     @allure.story('Test key word 今日头条')
     def test_webui_1(self):
-        """ 测试用例1，验证'今日头条'关键词在百度上的搜索结果
+        """ 测试用例1，验证'今日头条'关键词在百度上的搜索结果1
         """
 
         self._test_baidu('今日头条', 'test_webui_1')
