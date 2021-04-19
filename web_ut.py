@@ -18,9 +18,12 @@ class ISelenium(unittest.TestCase):
         config = configparser.ConfigParser()
         # windows写法
         # config.read(os.path.join('C:', os.environ['HOMEPATH'], 'iselenium.ini'))
-        config.read(os.path.join("C:" + os.environ['HOMEPATH'], "iselenium.ini"))
+        # config.read(os.path.join('C:' + os.environ['HOMEPATH'], 'iselenium.ini'))
         # 在liunux中是这么写
-        # config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
+        # config.read(os.path.join(os.environ['HOME'], 'iselenium.ini'))
+        # 使用jenkins编译时，这么写：然后把配置文件放到JENKINS_HOME目录下去
+        # JENKINS_HOME一般来说是：C:\Windows\System32\config\systemprofile\AppData\Local\Jenkins\.jenkins
+        config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
         return config
 
     def tearDown(self):
