@@ -19,7 +19,7 @@ class ISelenium(unittest.TestCase):
         # windows写法
         # config.read(os.path.join('C:', os.environ['HOMEPATH'], 'iselenium.ini'))
         # 在liunux中是这么写
-        config.read(os.path.join(os.environ['HOME'], 'iselenium.ini'))
+        config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
         return config
 
     def tearDown(self):
