@@ -23,32 +23,38 @@ class ISelenium(unittest.TestCase):
         # config.read(os.path.join(os.environ['HOME'], 'iselenium.ini'))
         # 使用jenkins编译时，这么写：然后把配置文件放到JENKINS_HOME目录下去
         # JENKINS_HOME一般来说是：C:\Windows\System32\config\systemprofile\AppData\Local\Jenkins\.jenkins
-        config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
+        # config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
+        # 为了Jenkins构建和windows执行都可以
+        try:
+            config.read(os.path.join('C:' + os.environ['HOMEPATH'], 'iselenium.ini'))
+        except KeyError:
+            config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
+
         return config
 
     def tearDown(self):
         self.driver.quit()
 
     def setUp(self):
-        # config = self.get_config()
-        #
-        # # 控制是否采用无界面形式运行自动化测试
-        # try:
-        #     using_headless = os.environ["using_headless"]
-        # except KeyError:
-        #     using_headless = None
-        #     print('没有配置环境变量 using_headless, 按照有界面方式运行自动化测试')
-        #
+        config = self.get_config()
+
+        # 控制是否采用无界面形式运行自动化测试
+        try:
+            using_headless = os.environ["using_headless"]
+        except KeyError:
+            using_headless = None
+            print('没有配置环境变量 using_headless, 按照有界面方式运行自动化测试')
+
         chrome_options = Options()
-        # if using_headless is not None and using_headless.lower() == 'true':
-        #     print('使用无界面方式运行')
-        #     print(using_headless)
-        #     chrome_options.add_argument("--headless")
-        #
+        if using_headless is not None and using_headless.lower() == 'true':
+            print('使用无界面方式运行')
+            print(using_headless)
+            chrome_options.add_argument("--headless")
+
         chrome_options.binary_location = "C:\\Users\\WJ\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
-        # self.driver = webdriver.Chrome(executable_path=config.get('driver', 'chrome_driver'),
-        #                                options=chrome_options)
-        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver = webdriver.Chrome(executable_path=config.get('driver', 'chrome_driver'),
+                                       options=chrome_options)
+        # self.driver = webdriver.Chrome(options=chrome_options)
 
     @allure.story('Test key word 今日头条')
     def test_webui_1(self):
