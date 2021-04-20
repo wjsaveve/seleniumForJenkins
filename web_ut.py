@@ -27,8 +27,12 @@ class ISelenium(unittest.TestCase):
         # 为了Jenkins构建和windows执行都可以
         try:
             config.read(os.path.join('C:' + os.environ['HOMEPATH'], 'iselenium.ini'))
+            print("地址1：")
+            print(os.environ['HOMEPATH'])
         except KeyError:
             config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
+            print("地址2：")
+            print(os.environ['JENKINS_HOME'])
 
         return config
 
