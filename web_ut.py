@@ -2,6 +2,7 @@
 # 创建时间：2021/4/18 15:15
 import configparser
 import os
+import sys
 import time
 import unittest
 
@@ -25,14 +26,21 @@ class ISelenium(unittest.TestCase):
         # JENKINS_HOME一般来说是：C:\Windows\System32\config\systemprofile\AppData\Local\Jenkins\.jenkins
         # config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
         # 为了Jenkins构建和windows执行都可以
-        try:
+        # 获得当前系统的类型
+        nowPlatform = sys.platform
+        if nowPlatform == 'win32':
+            print("这里是Windows系统:" + os.environ['HOMEPATH'])
             config.read(os.path.join('C:' + os.environ['HOMEPATH'], 'iselenium.ini'))
-            print("地址1：")
-            print(os.environ['HOMEPATH'])
-        except KeyError:
+        elif nowPlatform == 'linux':
+            print("这里是Linux系统:" + os.environ['HOMEPATH'])
+            config.read(os.path.join(os.environ['PATH'], 'iselenium.ini'))
+        else:
+            print("这里我也不知道是哪个系统，就放在Jenkins地址下吧:" + os.environ['JENKINS_HOME'])
             config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
-            print("地址2：")
-            print(os.environ['JENKINS_HOME'])
+        # try:
+        #     config.read(os.path.join('C:' + os.environ['HOMEPATH'], 'iselenium.ini'))
+        # except KeyError:
+        #     config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
 
         return config
 
