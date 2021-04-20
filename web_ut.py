@@ -55,7 +55,7 @@ class ISelenium(unittest.TestCase):
         nowPlatform = sys.platform
         if nowPlatform == 'win32':
             print("这里是Windows系统")
-
+            # chrome_options = Options()
             # 获得配置文件中，是否需要无界面运行的参数
             using_headless = config.get('driver_win7', 'using_headless')
             if using_headless == 'no':
@@ -67,9 +67,13 @@ class ISelenium(unittest.TestCase):
             chrome_path = config.get('driver_win7', 'chrome')
             if chrome_path != 'no_need':
                 chrome_options.binary_location = chrome_path
+                # chrome_options.binary_location = "C:\\Users\\WJ\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
+                # print('+++++++++++++++++++++' + chrome_path)
             # 启动浏览器
-            self.driver = webdriver.Chrome(executable_path=config.get('driver_win7', 'chrome_driver'),
-                                           options=chrome_options)
+            chrome_driver_path = config.get('driver_win7', 'chrome_driver')
+            self.driver = webdriver.Chrome(executable_path=chrome_driver_path,options=chrome_options)
+            # print("+++++++++++++++++" + chrome_driver_path)
+            # self.driver = webdriver.Chrome()
         elif nowPlatform == 'linux':
             print("这里是Linux系统")
             # 禁用沙箱【不加在liunx下会报错】
