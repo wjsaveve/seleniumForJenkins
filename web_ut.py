@@ -48,24 +48,49 @@ class ISelenium(unittest.TestCase):
         self.driver.quit()
 
     def setUp(self):
+        # 获取配置文件
         config = self.get_config()
-
-        # 控制是否采用无界面形式运行自动化测试
-        try:
-            using_headless = os.environ["using_headless"]
-        except KeyError:
-            using_headless = None
-            print('没有配置环境变量 using_headless, 按照有界面方式运行自动化测试')
-
         chrome_options = Options()
-        if using_headless is not None and using_headless.lower() == 'true':
-            print('使用无界面方式运行')
-            print(using_headless)
-            chrome_options.add_argument("--headless")
+        # 获得当前系统类型
+        nowPlatform = sys.platform
+        if nowPlatform == 'win32':
+            print("这里是Windows系统")
 
-        chrome_options.binary_location = "C:\\Users\\WJ\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
-        self.driver = webdriver.Chrome(executable_path=config.get('driver', 'chrome_driver'),
-                                       options=chrome_options)
+            # 获得配置文件中，是否需要无界面运行的参数
+            using_headless = config.get('driver_win7', 'using_headless')
+            if using_headless == 'no':
+                print('using_headless的值为：' + using_headless + '使用无界面方式运行')
+                chrome_options.add_argument("--headless")
+            else:
+                print('using_headless的值为：' + using_headless + '使用有界面方式运行')
+            # 指定chrome浏览器的路径
+            chrome_path = config.get('driver_win7', 'chrome')
+            if chrome_path != 'no_need':
+                chrome_options.binary_location = chrome_path
+            # 启动浏览器
+            self.driver = webdriver.Chrome(executable_path=config.get('driver_win7', 'chrome_driver'),
+                                           options=chrome_options)
+        elif nowPlatform == 'linux':
+            print("这里是Linux系统")
+            # 禁用沙箱【不加在liunx下会报错】
+            chrome_options.add_argument('--no-sandbox')
+            # 获得配置文件中，是否需要无界面运行的参数
+            using_headless = config.get('driver_centos7', 'using_headless')
+            if using_headless == 'no':
+                print('using_headless的值为：' + using_headless + '使用无界面方式运行')
+                chrome_options.add_argument("--headless")
+            else:
+                print('using_headless的值为：' + using_headless + '使用有界面方式运行')
+            # 指定chrome浏览器的路径
+            chrome_path = config.get('driver_centos7', 'chrome')
+            if chrome_path != 'no_need':
+                chrome_options.binary_location = chrome_path
+            # 启动浏览器
+            self.driver = webdriver.Chrome(executable_path=config.get('driver_centos7', 'chrome_driver'),
+                                           options=chrome_options)
+        else:
+            print("这里我也不知道是哪个系统")
+
         # self.driver = webdriver.Chrome(options=chrome_options)
 
     @allure.story('Test key word 今日头条')
