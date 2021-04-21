@@ -33,7 +33,8 @@ class ISelenium(unittest.TestCase):
             config.read(os.path.join('C:' + os.environ['HOMEPATH'], 'iselenium.ini'))
         elif nowPlatform == 'linux':
             print("这里是Linux系统:" + os.environ['PATH'])
-            config.read(os.path.join(os.environ['PATH'], 'iselenium.ini'))
+            # config.read(os.path.join(os.environ['PATH'], 'iselenium.ini'))
+            config.read('/home/wangjian/iSelenium.ini')
         else:
             print("这里我也不知道是哪个系统，就放在Jenkins地址下吧:" + os.environ['JENKINS_HOME'])
             config.read(os.path.join(os.environ['JENKINS_HOME'], 'iselenium.ini'))
